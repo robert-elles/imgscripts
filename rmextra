@@ -1,0 +1,40 @@
+#!/bin/bash
+
+declare -a jpegs
+
+for pic in "$PWD"/*
+do
+    picname=$(basename "$pic")
+
+    exif=$(exiv2 "$picname" 2> /dev/null)
+
+    if [ "$exif" == "" ] ; then
+	continue
+    fi
+
+    cameraMake=$(echo "$exif" | grep "Camera make")
+    cameraModel=$(echo "$exif" | grep "Camera model")
+    timeStamp=$(echo "$exif" | grep "Image timestamp")
+    exposureTime=$(echo "$exif" | grep "Exposure time")
+    aperture=$(echo "$exif" | grep "Aperture")
+    focalLength=$(echo "$exif" | grep "Focal length")
+    exposureBias=$(echo "$exif" | grep "Exposure bias")
+    isoSpeed=$(echo "$exif" | grep "Iso speed")
+
+    extension="${picname##*.}"
+
+    if [ "$extension" == "" ] ; then
+	continue
+    fi
+
+    str="$cameraMake$cameraModel$timeStamp$exposureTime$aperture$focalLength$exposureBias$isoSpeed"
+
+    
+
+    echo "$cameraMake"
+    echo $cameraModel
+    echo $timeStamp
+    echo $exposureTime
+    echo $aperture
+    echo $focalLength
+done
